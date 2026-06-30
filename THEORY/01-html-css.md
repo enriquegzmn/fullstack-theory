@@ -476,6 +476,45 @@ Ofrece clases utilitarias predefinidas (una propiedad cada una) directamente en 
 
 ---
 
+## 4. Estructura de archivos del proyecto: denki-landing
+
+Hasta ahora la teoría cubrió etiquetas y reglas sueltas; falta un paso necesario antes de empezar a construir: **cómo organizar los archivos** del proyecto real de la landing page de Denki en carpetas, no solo escribir HTML/CSS en un único archivo de prueba.
+
+```
+denki-landing/
+├── index.html
+├── css/
+│   └── estilos.css
+├── img/
+│   ├── logo-denki.svg
+│   └── (imágenes del hero, características, etc.)
+├── .gitignore
+└── README.md
+```
+
+**Por qué esta organización, y no otra:**
+- **`index.html` en la raíz**: es el nombre de archivo que cualquier hosting estático (Netlify/Vercel, visto en el Bloque 07) busca automáticamente al servir un sitio — si el archivo principal tuviera otro nombre o estuviera en una subcarpeta, el sitio no cargaría correctamente sin configuración adicional.
+- **`css/estilos.css`**: el archivo CSS externo (sección 3.2 de este documento) enlazado con `<link rel="stylesheet" href="css/estilos.css">` dentro del `<head>`. Se separa en su propia carpeta para no mezclar tipos de archivo distintos en la raíz del proyecto, algo que se vuelve más importante a medida que el sitio crece más allá de una sola página.
+- **`img/`**: centraliza los recursos visuales (logo, imágenes de cada sección), evitando rutas relativas confusas como `../../imagenes/cosa.png` dispersas por el código.
+- **`.gitignore`**: aunque un proyecto HTML/CSS puro casi no genera archivos que deban excluirse de Git, conviene tenerlo desde el primer commit (por ejemplo, para excluir `.DS_Store` en macOS) — es el mismo hábito que se refuerza con más peso en el Bloque 07 (Despliegue), donde si se omite en un proyecto con dependencias, sí puede causar problemas reales.
+- **`README.md`**: descripción del proyecto, capturas de pantalla y enlace en vivo una vez desplegado — el mismo estándar de documentación que pide el checklist de producción del Bloque 07, aplicado aquí desde el inicio del curso en vez de agregarse después como ocurrencia tardía.
+
+**Cómo enlazar los archivos correctamente:**
+```html
+<!-- dentro de index.html -->
+<head>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <img src="img/logo-denki.svg" alt="Logo Denki Power Systems">
+</body>
+```
+Nota que las rutas (`css/estilos.css`, `img/logo-denki.svg`) son **relativas** a la ubicación de `index.html`: como `index.html` vive en la raíz del proyecto, basta con indicar la subcarpeta sin necesidad de `./` al inicio (aunque escribirlo explícitamente, `./css/estilos.css`, también es válido y a veces preferido por claridad).
+
+A medida que el proyecto crezca (por ejemplo, si la landing necesita una segunda página como `precios.html`), esta misma estructura se mantiene: el archivo nuevo se agrega en la raíz junto a `index.html`, y ambas páginas comparten el mismo `css/estilos.css`, evitando duplicar estilos.
+
+---
+
 ## Ejercicios del Bloque 01 (con respuesta)
 
 ### Ejercicio 1.1 — Estructura semántica básica
