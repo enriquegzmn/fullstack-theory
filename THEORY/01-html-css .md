@@ -468,7 +468,7 @@ Ofrece clases utilitarias predefinidas (una propiedad cada una) directamente en 
 
 ## Imágenes de referencia para los proyectos de este bloque
 
-**Proyecto #1 — Landing Page Responsiva**: debe tener una sección "hero" amplia con título, subtítulo y botón de llamado a la acción, seguida de secciones de características, testimonios y formulario de contacto, todo perfectamente adaptado a móvil.
+**Proyecto #1 — Landing Page Responsiva**: basada directamente en la estructura real de **denkienergy.com** (ver sección 5, "Proyecto guiado paso a paso"): header con navegación, hero con datos destacados, sección de problema (tarjetas), beneficios numerados, proceso en 3 pasos, casos de uso, testimonios, FAQ con acordeón nativo, formulario de contacto y footer — todo perfectamente adaptado a móvil.
 
 **Proyecto #2 — Portafolio Personal**: sitio de una sola página con secciones claras (sobre mí, habilidades, proyectos en tarjetas, contacto), diseño limpio y profesional, construido con Tailwind CSS.
 
@@ -515,7 +515,246 @@ A medida que el proyecto crezca (por ejemplo, si la landing necesita una segunda
 
 ---
 
-## Ejercicios del Bloque 01 (con respuesta)
+## 5. Proyecto guiado paso a paso: réplica de denkienergy.com
+
+El proyecto de este bloque deja de ser una landing genérica y se basa directamente en la estructura real de **https://www.denkienergy.com/**, un sitio de una empresa del mismo sector (medición energética IoT) que sirve como referencia casi perfecta para Denki Power Systems. A continuación se desglosa sección por sección, en el orden exacto en que aparecen en el sitio real, con la etiqueta semántica correspondiente y el paso a paso para construir cada una usando solo HTML y CSS (sin JavaScript — incluso el acordeón de preguntas frecuentes se logra con HTML/CSS puro, como se ve en el Paso 8).
+
+### Paso 0 — Preparar la estructura de archivos
+Antes de escribir contenido, crea la estructura de la sección 4 (`index.html`, `css/estilos.css`, `img/`), y deja el esqueleto base del documento (sección 2.2 de este bloque: `<!DOCTYPE html>`, `<head>` con `meta charset`/`viewport`/`title`, `<body>` vacío).
+
+### Paso 1 — Header y navegación
+
+El sitio real tiene un header fijo con el logo a la izquierda y enlaces de navegación a la derecha, más un botón de "Contacto" destacado.
+
+```html
+<header>
+  <a href="#" class="logo">denki</a>
+  <nav>
+    <a href="#soluciones">Soluciones</a>
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#casos-de-uso">Casos de uso</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a href="#contacto" class="boton-cta">Contacto</a>
+</header>
+```
+**CSS:** usa Flexbox (sección 3.11) con `justify-content: space-between` para distribuir logo/nav/botón, y `position: sticky; top: 0;` (sección 3.13) para que el header se mantenge visible al hacer scroll, como en el sitio original.
+
+### Paso 2 — Hero (sección principal)
+
+El hero real tiene una etiqueta pequeña ("Medición energética IoT"), un `<h1>` de dos líneas, un párrafo de propuesta de valor, dos botones (uno principal, uno secundario), y 3 datos destacados en línea (100% / IoT / 360°).
+
+```html
+<section class="hero">
+  <p class="etiqueta">Medición energética IoT</p>
+  <h1>Controla el consumo energético de tu empresa en tiempo real.</h1>
+  <p>Instalamos dispositivos IoT que miden, analizan y reportan el uso energético de tu planta o empresa.</p>
+  <div class="botones-hero">
+    <a href="#contacto" class="boton-cta">Ponte en contacto con nosotros</a>
+    <a href="#como-funciona" class="boton-secundario">Ver cómo funciona</a>
+  </div>
+  <div class="datos-destacados">
+    <div><strong>100%</strong><span>Proyectos a medida</span></div>
+    <div><strong>IoT</strong><span>Medición en tiempo real</span></div>
+    <div><strong>360°</strong><span>Cobertura energética</span></div>
+  </div>
+</section>
+```
+**CSS:** los "datos destacados" se acomodan con Flexbox (`display: flex; gap: 32px;`), y los botones también con Flexbox en fila, pasando a columna en móvil (media query, sección 3.14) para que no se vean apretados en pantallas pequeñas.
+
+### Paso 3 — Sección "El problema" (tarjetas con ícono)
+
+4 tarjetas con un emoji/ícono, título y descripción — exactamente el caso de uso de CSS Grid responsivo visto en la sección 3.12 de este bloque.
+
+```html
+<section id="problema">
+  <p class="etiqueta">El problema</p>
+  <h2>La mayoría de empresas opera sin visibilidad energética real</h2>
+  <div class="grid-tarjetas">
+    <article class="tarjeta">
+      <span class="icono">⚡</span>
+      <h3>Incumplimiento del código de red</h3>
+      <p>Tu fábrica recibe multas porque no puedes demostrar con datos que cumples los requisitos de calidad de energía.</p>
+    </article>
+    <!-- repetir <article> para las otras 3 tarjetas: "Consumo invisible", "Medidores obsoletos", "Datos dispersos" -->
+  </div>
+</section>
+```
+```css
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+}
+```
+
+### Paso 4 — Sección "Beneficios" (lista numerada)
+
+6 beneficios numerados (01 a 06), cada uno con número, título y descripción — misma técnica de Grid que el Paso 3, pero mostrando el número con un pseudo-elemento o simplemente como texto grande.
+
+```html
+<section id="soluciones">
+  <p class="etiqueta">Beneficios</p>
+  <h2>Todo lo que obtienes con Denki Power Systems</h2>
+  <div class="grid-tarjetas">
+    <article class="beneficio">
+      <span class="numero">01</span>
+      <h3>Medición continua en tiempo real</h3>
+      <p>Nuestros dispositivos IoT registran el consumo eléctrico segundo a segundo.</p>
+    </article>
+    <!-- repetir hasta el 06 -->
+  </div>
+</section>
+```
+
+### Paso 5 — Sección "Proceso" (3 pasos)
+
+3 pasos numerados en fila (o columna en móvil), cada uno con número, título, descripción y una línea de detalle adicional en texto más pequeño.
+
+```html
+<section id="como-funciona">
+  <p class="etiqueta">Proceso</p>
+  <h2>De cero a monitoreo total en tres pasos</h2>
+  <div class="pasos">
+    <article class="paso">
+      <span class="numero">01</span>
+      <h3>Diagnóstico y diseño</h3>
+      <p>Estudio de tu instalación eléctrica para definir los puntos de medición necesarios.</p>
+      <small>Estudio energético + plano de instalación + propuesta técnica</small>
+    </article>
+    <!-- repetir para "Instalación de dispositivos IoT" y "Monitoreo desde la plataforma" -->
+  </div>
+</section>
+```
+**CSS:** `.pasos` con Flexbox en fila (`gap` entre cada paso), igual que el Paso 2, colapsando a columna en móvil.
+
+### Paso 6 — Casos de uso (2 columnas con "El reto / La solución / Resultado")
+
+Cada caso de uso tiene una etiqueta de categoría, título, y 3 subsecciones internas (el reto, la solución, el resultado) — buen ejercicio de jerarquía de encabezados (sección 2.3: `h2` para la sección, `h3` para cada caso, y un `h4` o `strong` para "El reto"/"La solución"/"Resultado" dentro de cada caso).
+
+```html
+<section id="casos-de-uso">
+  <p class="etiqueta">Casos de uso</p>
+  <h2>Cómo lo han resuelto otras empresas</h2>
+  <div class="grid-casos">
+    <article class="caso">
+      <p class="categoria">Manufactura</p>
+      <h3>Cumplimiento del código de red en planta industrial</h3>
+      <h4>El reto</h4>
+      <p>Una planta recibía penalizaciones de su proveedor eléctrico sin tener datos para refutar los cargos.</p>
+      <h4>La solución</h4>
+      <p>Instalamos medidores de calidad de energía en los puntos de conexión a la red.</p>
+      <h4>Resultado</h4>
+      <p>Visibilidad total del perfil eléctrico + evidencia verificable para disputar cargos.</p>
+    </article>
+    <!-- repetir para el segundo caso de uso, "Multi-planta" -->
+  </div>
+</section>
+```
+
+### Paso 7 — Testimonios
+
+3 tarjetas de testimonio con cita, inicial en un círculo (avatar simple sin imagen), nombre y cargo — buen ejercicio de `border-radius: 50%` (visto en el Bloque sobre CSS) para simular el avatar circular con solo una letra.
+
+```html
+<section id="testimonios">
+  <p class="etiqueta">Testimonios</p>
+  <h2>Empresas que ya tienen visibilidad de su energía</h2>
+  <div class="grid-tarjetas">
+    <blockquote class="testimonio">
+      <p>Antes del sistema de Denki, nuestros reportes de consumo eran manuales y llegaban con semanas de retraso.</p>
+      <footer>
+        <span class="avatar">R</span>
+        <cite>Roberto A. — Director de Operaciones</cite>
+      </footer>
+    </blockquote>
+    <!-- repetir para los otros 2 testimonios -->
+  </div>
+</section>
+```
+Nota el uso correcto de `<blockquote>`/`<cite>` (sección 2.3), apropiado semánticamente para citas atribuidas a una persona — más correcto que usar `<div>` genéricos para todo.
+
+### Paso 8 — FAQ con acordeón (HTML/CSS puro, sin JavaScript)
+
+El sitio real tiene preguntas que se expanden al hacer clic. Esto se logra sin JavaScript usando las etiquetas nativas `<details>`/`<summary>`:
+
+```html
+<section id="faq">
+  <p class="etiqueta">FAQ</p>
+  <h2>Preguntas frecuentes</h2>
+  <details>
+    <summary>¿Cuánto tiempo tarda la instalación?</summary>
+    <p>El tiempo varía según el número de puntos de medición, pero la mayoría de instalaciones se completan en 1-2 semanas.</p>
+  </details>
+  <details>
+    <summary>¿Necesito cambiar mi infraestructura eléctrica existente?</summary>
+    <p>En la mayoría de los casos no, nuestros dispositivos se instalan de forma no invasiva.</p>
+  </details>
+  <!-- repetir para el resto de preguntas -->
+</section>
+```
+`<details>` y `<summary>` son etiquetas HTML nativas que crean un acordeón funcional (clic para expandir/contraer) sin una sola línea de JavaScript — el navegador maneja el comportamiento de abrir/cerrar automáticamente. Con CSS se puede personalizar la apariencia de la flecha y el espaciado, pero la funcionalidad ya viene incluida.
+
+### Paso 9 — Formulario de contacto
+
+Aplica directamente la sección 2.10 de este bloque (formularios en profundidad): nombre, empresa, correo, mensaje, con las validaciones nativas correspondientes.
+
+```html
+<section id="contacto">
+  <p class="etiqueta">Contacto</p>
+  <h2>¿Listo para tener visibilidad total de tu energía?</h2>
+  <p>Cuéntanos sobre tu instalación y te preparamos un diagnóstico inicial sin costo.</p>
+  <form>
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="empresa">Empresa</label>
+    <input type="text" id="empresa" name="empresa" required>
+
+    <label for="correo">Correo electrónico</label>
+    <input type="email" id="correo" name="correo" required>
+
+    <label for="mensaje">Cuéntanos tu situación</label>
+    <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+    <button type="submit">Enviar mensaje</button>
+  </form>
+  <p><small>Respondemos en menos de 24 horas hábiles.</small></p>
+</section>
+```
+
+### Paso 10 — Footer
+
+El footer real tiene 3 columnas: descripción de la empresa, enlaces de "Producto" (los mismos del nav), y datos de contacto + aviso de privacidad.
+
+```html
+<footer>
+  <div class="footer-col">
+    <p class="logo">denki</p>
+    <p>Medición energética inteligente para empresas. Dispositivos IoT, plataforma de monitoreo e instalación fotovoltaica.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Producto</h4>
+    <a href="#soluciones">Soluciones</a>
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#casos-de-uso">Casos de uso</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contacto</h4>
+    <a href="mailto:contacto@denkipower.com">contacto@denkipower.com</a>
+    <a href="tel:+525500000000">+52 (55) 0000-0000</a>
+  </div>
+  <p class="copyright">&copy; 2026 Denki Power Systems. Todos los derechos reservados.</p>
+</footer>
+```
+**CSS:** Flexbox con `justify-content: space-between` para las 3 columnas, colapsando a columna única en móvil — el mismo patrón responsivo usado en el header (Paso 1), reforzando que unas pocas técnicas de Flexbox/Grid bien entendidas resuelven la mayoría de los layouts de un sitio completo.
+
+### Paso 11 — Responsividad general
+
+Con todas las secciones construidas, revisa el sitio completo en un ancho de pantalla móvil (usando las herramientas de desarrollador del navegador, o reduciendo la ventana). Aplica media queries (sección 3.14) para: apilar el header en columna o convertirlo en un menú simplificado, hacer que todas las cuadrículas (`grid-tarjetas`, `pasos`, `grid-casos`) pasen a una sola columna, y reducir el tamaño de fuente del `<h1>` del hero para que no se vea desproporcionado en pantallas pequeñas.
+
+---
 
 ### Ejercicio 1.1 — Estructura semántica básica
 Crea la estructura semántica (sin contenido real, solo el esqueleto) de la futura landing page de Denki: header con logo y navegación, una sección hero, una sección de características, y footer.
